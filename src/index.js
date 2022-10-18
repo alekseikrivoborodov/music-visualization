@@ -12,22 +12,19 @@
 import "./styles.css";
 import * as THREE from "three";
 import { getProject, types as t } from "@theatre/core";
-// import studio from "@theatre/studio";
+import studio from "@theatre/studio";
 import state from "./state.json";
-import audioUrl from "./music/music.mp3";
+import audioUrl from "./music/badcurt - когда мы ссоримся.mp3";
 
-//  studio.initialize();
+studio.initialize();
 
 const project = getProject("AroundTheWorld", { state: state });
 
+// create an AudioContext using the Audio API
+const audioContext = new AudioContext()
+
 const sheet = project.sheet("Scene");
-sheet.sequence
-    .attachAudio({
-        source: audioUrl
-    })
-    .then(() => {
-        console.log("Music ready!");
-    });
+
 
 
 
@@ -372,5 +369,16 @@ console.log(
     "background: black; color: white; padding: 1ch 2ch; border-radius: 2rem;"
 );
 
-// Play the animation on repeat
-project.ready.then(() => sheet.sequence.play({ iterationCount: Infinity }))
+
+sheet.sequence
+    .attachAudio({
+        source: audioUrl,
+        // audioContext
+    })
+    .then(() => {
+        console.log("Music ready!");
+        sheet.sequence.play()
+        // Play the animation on repeat
+        project.ready.then(() => sheet.sequence.play({ iterationCount: Infinity }))
+    });
+
